@@ -6,17 +6,34 @@ using System.Threading.Tasks;
 
 namespace Library
 {
-    public abstract class Login
+    abstract class Login
     {
-        protected static Login user = null;
+        //Protected Properties 
         protected string Username { get; set; }
         protected string Password { get; set; }
         protected string Name { get; set; }
 
-        protected abstract Login GetInstance(string type);
-
-        protected abstract Book FindBook(string bookTitle);
-
+        //Abstract Functions For The Child Classes
+        protected abstract Book FindBook(string bookName);
         protected abstract void LogOut();
+
+        //Factory Function To Instantiate a Logger
+        public static Login CreateLogger(string type, string username, string password, string name, bool isMember)
+        {
+            Login logger = null;
+            if (type == "staff")
+            {
+                logger = Staff.GetInstance(username, password, name);
+            }
+            else if (type == "user")
+            {
+                logger = User.GetInstance(username, password, name, isMember);
+            }
+            else if (type == "supplier")
+            {
+                logger = Supplier.GetInstance(username, password, name);
+            }
+            return logger;
+        }
     }
 }
